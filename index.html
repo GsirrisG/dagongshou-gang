@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 大匕首帮 · 全网通缉令</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif; background: #0a0000; min-height: 100vh; overflow-x: hidden; }
+        .siren-bar { position: fixed; top: 0; left: 0; width: 100%; height: 6px; z-index: 999; display: flex; }
+        .siren-bar .red { flex: 1; background: #ff0000; animation: flashRed 1s infinite; }
+        .siren-bar .blue { flex: 1; background: #0044ff; animation: flashBlue 1s infinite; }
+        .siren-bar .red2 { flex: 1; background: #ff0000; animation: flashRed2 1s infinite; }
+        .siren-bar .blue2 { flex: 1; background: #0044ff; animation: flashBlue2 1s infinite; }
+        @keyframes flashRed { 0%,100%{opacity:1} 50%{opacity:0.2} }
+        @keyframes flashBlue { 0%,100%{opacity:0.2} 50%{opacity:1} }
+        @keyframes flashRed2 { 0%,100%{opacity:0.2} 50%{opacity:1} }
+        @keyframes flashBlue2 { 0%,100%{opacity:1} 50%{opacity:0.2} }
+        .bg-pattern { position: fixed; top:0;left:0;width:100%;height:100%; background: repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,0,0,0.02) 40px,rgba(255,0,0,0.02) 41px),radial-gradient(ellipse at 50% 0%,rgba(139,0,0,0.3) 0%,transparent 70%); z-index:0; pointer-events:none; }
+        .container { position: relative; z-index: 1; max-width: 1300px; margin: 0 auto; padding: 30px 20px 60px; }
+        .header { text-align: center; padding: 50px 20px 40px; }
+        .badge { display: inline-block; background: #1a0000; border: 3px solid #cc0000; padding: 8px 30px; margin-bottom: 20px; transform: rotate(-2deg); transition: transform 0.2s; }
+        .badge span { color: #ff4444; font-size: 14px; letter-spacing: 6px; font-weight: 700; }
+        .header h1 { font-size: 64px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(255,0,0,0.5),0 0 40px rgba(255,0,0,0.3),4px 4px 0 #8b0000; letter-spacing: 12px; display: inline-block; cursor: pointer; position: relative; transition: text-shadow 0.3s; }
+        .header h1::before { content:'🚨'; position: absolute; left: -60px; top: 50%; transform: translateY(-50%); font-size: 40px; }
+        .header h1::after { content:'🚨'; position: absolute; right: -60px; top: 50%; transform: translateY(-50%); font-size: 40px; }
+        @media(max-width:600px){ .header h1{font-size:36px;letter-spacing:6px} .header h1::before{left:-40px;font-size:24px} .header h1::after{right:-40px;font-size:24px} }
+        .header .sub { color: rgba(255,255,255,0.6); font-size: 16px; letter-spacing: 8px; margin-top: 12px; border-top: 2px dashed rgba(255,0,0,0.3); border-bottom: 2px dashed rgba(255,0,0,0.3); display: inline-block; padding: 8px 30px; }
+        .header .police-line { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 18px auto 0; color: #ffd700; font-size: 14px; letter-spacing: 3px; max-width: 700px; }
+        .header .police-line::before, .header .police-line::after { content: ''; flex: 1; height: 2px; background: repeating-linear-gradient(90deg,#ffd700 0px,#ffd700 10px,#000 10px,#000 20px); }
+        .stats { display: flex; justify-content: center; gap: 40px; margin: 30px 0 10px; }
+        .stat-item { text-align: center; background: rgba(139,0,0,0.2); border: 1px solid rgba(255,0,0,0.2); padding: 12px 28px; border-radius: 8px; }
+        .stat-item .num { font-size: 32px; font-weight: 900; color: #ff4444; }
+        .stat-item .label { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
+        @media(max-width:600px){ .stats{gap:12px;flex-wrap:wrap} .stat-item{padding:8px 16px} .stat-item .num{font-size:24px} }
+        .wanted-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+        .wanted-card { background: linear-gradient(180deg,#1a0808 0%,#0d0000 100%); border: 2px solid #8b0000; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 30px rgba(139,0,0,0.2); opacity: 0; transform: translateY(40px); animation: cardIn 0.6s ease forwards; }
+        .wanted-card:nth-child(1){animation-delay:0.1s} .wanted-card:nth-child(2){animation-delay:0.2s} .wanted-card:nth-child(3){animation-delay:0.3s} .wanted-card:nth-child(4){animation-delay:0.4s} .wanted-card:nth-child(5){animation-delay:0.5s} .wanted-card:nth-child(6){animation-delay:0.6s} .wanted-card:nth-child(7){animation-delay:0.7s}
+        @keyframes cardIn{to{opacity:1;transform:translateY(0)}}
+        .wanted-card:hover { transform: translateY(-10px) scale(1.02); border-color: #ff4444; box-shadow: 0 15px 50px rgba(255,0,0,0.3); }
+        .wanted-card .stamp { position: absolute; top: 15px; right: 15px; width: 70px; height: 70px; border: 4px solid #cc0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transform: rotate(15deg); opacity: 0.7; z-index: 5; background: rgba(0,0,0,0.5); }
+        .wanted-card .stamp span { color: #cc0000; font-size: 11px; font-weight: 900; letter-spacing: 1px; text-align: center; line-height: 1.2; }
+        .wanted-card .photo-area { width: 100%; height: 260px; overflow: hidden; position: relative; background: #111; border-bottom: 3px solid #8b0000; }
+        .wanted-card .photo-area .mugshot-bg { position: absolute; top:0;left:0;width:100%;height:100%; background: repeating-linear-gradient(0deg,transparent,transparent 5px,rgba(0,0,0,0.1) 5px,rgba(0,0,0,0.1) 6px); z-index:2; pointer-events:none; }
+        .wanted-card .photo-area img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s; filter: grayscale(0.4) contrast(1.1); }
+        .wanted-card:hover .photo-area img { filter: grayscale(0) contrast(1); transform: scale(1.05); }
+        .wanted-card .photo-area .height-mark { position: absolute; right:8px; top:0; bottom:0; width:20px; background: repeating-linear-gradient(to bottom,rgba(255,255,255,0.15) 0px,rgba(255,255,255,0.15) 20px,transparent 20px,transparent 40px); z-index:3; pointer-events:none; }
+        .wanted-card .photo-area .height-mark::after { content:'CM'; position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:8px; color:rgba(255,255,255,0.2); letter-spacing:1px; }
+        .wanted-card .info { padding: 18px 16px 20px; }
+        .wanted-card .info .wanted-id { font-size: 11px; color: #666; letter-spacing: 2px; margin-bottom: 4px; }
+        .wanted-card .info .wanted-id em { color: #ff4444; font-style: normal; }
+        .wanted-card .info .name { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 2px; }
+        .wanted-card .info .title { font-size: 13px; color: #ffd700; letter-spacing: 3px; margin: 2px 0 8px; }
+        .wanted-card .info .charges { background: rgba(139,0,0,0.2); border-left: 3px solid #cc0000; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+        .wanted-card .info .charges strong { color: #ff6666; }
+        .wanted-card .info .bounty { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); }
+        .wanted-card .info .bounty .amount { font-size: 20px; font-weight: 900; color: #ffd700; letter-spacing: 1px; }
+        .wanted-card .info .bounty .reward-label { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+        .wanted-card .dossier { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); padding: 20px; transform: translateY(100%); transition: transform 0.4s ease; border-top: 2px solid #cc0000; z-index: 10; }
+        .wanted-card:hover .dossier { transform: translateY(0); }
+        .wanted-card .dossier h4 { color: #ff4444; font-size: 13px; letter-spacing: 3px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,0,0,0.2); padding-bottom: 6px; }
+        .wanted-card .dossier p { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.7; }
+        .wanted-card .dossier .roast { color: #ffd700; font-style: italic; margin-top: 6px; font-size: 12px; }
+        .footer { text-align: center; margin-top: 60px; padding: 30px; border-top: 2px solid rgba(139,0,0,0.3); }
+        .footer .tip-line { color: #ff4444; font-size: 18px; letter-spacing: 6px; font-weight: 700; }
+        .footer .tip-sub { color: rgba(255,255,255,0.4); font-size: 13px; letter-spacing: 2px; margin-top: 8px; }
+        .footer .made-by { color: rgba(255,255,255,0.2); font-size: 12px; margin-top: 20px; letter-spacing: 1px; }
+        .footer .cops { margin-top: 20px; font-size: 30px; animation: walk 3s ease-in-out infinite; display: inline-block; }
+        @keyframes walk { 0%,100%{transform:translateX(-20px)} 50%{transform:translateX(20px)} }
+        .typing-line { font-size: 14px; color: rgba(255,255,255,0.5); letter-spacing: 4px; margin-top: 10px; min-height: 24px; }
+        @media(max-width:600px){ .container{padding:16px 12px 30px} .wanted-grid{gap:18px;grid-template-columns:1fr} .wanted-card .photo-area{height:220px} }
+    </style>
+</head>
+<body>
+    <div class="siren-bar"><div class="red"></div><div class="blue"></div><div class="red2"></div><div class="blue2"></div></div>
+    <div class="bg-pattern"></div>
+    <div class="container">
+        <div class="header">
+            <div class="badge"><span>🔰 绝密档案 · LEVEL MAX</span></div>
+            <h1 onclick="blinkTitle()">大匕首帮</h1>
+            <div class="sub">★ 全 网 通 缉 令 ★</div>
+            <div class="typing-line" id="typing-text"></div>
+            <div class="police-line">举报有奖 · 包庇同罪 · 生死不论</div>
+            <div class="stats">
+                <div class="stat-item"><div class="num">7</div><div class="label">在逃成员</div></div>
+                <div class="stat-item"><div class="num">🔥</div><div class="label">危险等级</div></div>
+                <div class="stat-item"><div class="num">∞</div><div class="label">悬赏总额</div></div>
+            </div>
+        </div>
+        <div class="wanted-grid" id="wanted-grid"></div>
+        <div class="footer">
+            <div class="tip-line">📢 如发现上述人员，请立即拨打 110</div>
+            <div class="tip-sub">提供有效线索者，奖励大匕首帮珍藏周边一份</div>
+            <div class="cops">👮‍♂️ 👮 👮‍♀️</div>
+            <div class="made-by">🕵️ 由热心市民 朱嘉俊 协助编制 · 绝对机密</div>
+        </div>
+    </div>
+    <script>
+        const images=['images/img1.jpg','images/img2.jpg','images/img3.jpg','images/img4.jpg','images/img5.jpg','images/img6.jpg','images/img7.jpg'];
+        const titles=['大匕首 · 绝命刀客','大匕首 · 冷面杀手','大匕首 · 亡命之徒','大匕首 · 暗夜幽灵','大匕首 · 霹雳娇娃','大匕首 · 笑面狂徒','大匕首 · 独行侠盗'];
+        const charges=[['非法持有帅照','恶意卖萌','扰乱社会秩序'],['深夜偷吃外卖','唱歌跑调扰民','公共场所耍帅'],['穿拖鞋出门','在群里发假红包','聚众哈哈哈'],['自拍过度美颜','朋友圈深夜放毒','危害单身狗'],['走路姿势太拽','笑点过低','说话像说唱'],['拍照只会剪刀手','冷笑话制造机','聚众自拍'],['睡觉打呼震天','吃饭吧唧嘴','偷用别人充电器']];
+        const roasts=['此人对镜头的杀伤力堪比核武器——每次拍照都能让相机自动关机 📸💥','这位选手完美诠释了什么叫"主要看气质"——除了气质啥也没有 😏','建议将此人的照片列为国家一级保护废物，有关部门已介入调查 🗑️','此人自拍时手机AI会弹出提示：检测到人脸，建议调整为"抽象艺术"模式 🎨','传说中背面想犯罪、侧面想撤退、正面想见鬼的三面间谍 👻','行走的表情包，活着的段子手，手机相册里全是能笑死继承人的素材 🤣','如果颜值有罪，那他已经构成"无期徒刑"——可惜法官判的是"无罪释放" ⚖️'];
+        const bounties=['999,999','888,888','777,777','666,666','555,555','444,444','333,333'];const wantedIds=['DB-001','DB-002','DB-003','DB-004','DB-005','DB-006','DB-007'];
+        const grid=document.getElementById('wanted-grid');
+        images.forEach((img,i)=>{const card=document.createElement('div');card.className='wanted-card';card.innerHTML='<div class="stamp"><span>通缉<br>WANTED</span></div><div class="photo-area"><div class="mugshot-bg"></div><div class="height-mark"></div><img src="'+img+'" alt="" loading="lazy"></div><div class="info"><div class="wanted-id">№ <em>'+wantedIds[i]+'</em> · 危险等级 ████</div><div class="name">🔪 代号 '+(i+1)+'</div><div class="title">'+titles[i]+'</div><div class="charges"><strong>⚡ 罪名：</strong>'+charges[i].join(' · ')+'</div><div class="bounty"><span class="amount">¥'+bounties[i]+'</span><span class="reward-label">悬赏金额</span></div></div><div class="dossier"><h4>📁 犯罪档案</h4><p>'+roasts[i]+'</p><div class="roast">—— 线人密报，绝对可靠</div></div>';grid.appendChild(card);});
+        const textEl=document.getElementById('typing-text');const msg='⚠️ 以下人员因危害社会搞笑安全，现面向全网公开通缉 ⚠️';let idx=0;function typeText(){if(idx<msg.length){textEl.textContent+=msg[idx];idx++;setTimeout(typeText,40)}}setTimeout(typeText,500);
+        function blinkTitle(){const h1=document.querySelector('.header h1');h1.style.textShadow='0 0 40px #ff0000, 0 0 80px #ff0000, 0 0 120px #ff0000';setTimeout(()=>{h1.style.textShadow=''},500)}
+        document.addEventListener('mousemove',(e)=>{const b=document.querySelector('.badge');if(b){b.style.transform='rotate(-2deg) translate('+((e.clientX/window.innerWidth-0.5)*6)+'px,'+((e.clientY/window.innerHeight-0.5)*6)+'px)'}});
+    </script>
+</body>
+</html>
